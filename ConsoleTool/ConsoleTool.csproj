@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <PackageId>ConsoleTool</PackageId>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.0-preview1" />
+        <PackageReference Include="Dalamud.CrystalTower" Version="2.0.0" />
+        <PackageReference Include="Lumina" Version="3.5.1" />
+        <PackageReference Include="Lumina.Excel" Version="6.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Dalamud">
+            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\GrimcoDatabase\GrimcoDatabase.csproj" />
+      <ProjectReference Include="..\GrimcoLib\GrimcoLib.csproj" />
+    </ItemGroup>
+
+</Project>
