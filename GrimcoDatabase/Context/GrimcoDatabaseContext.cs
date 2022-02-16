@@ -1,4 +1,5 @@
-﻿using GrimcoLib.Models;
+﻿using System;
+using GrimcoLib.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GrimcoDatabase.Context;
@@ -14,7 +15,7 @@ public class GrimcoDatabaseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Database=Grimco;Username=postgres;Password=postgres;");
+        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_CON")!);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
