@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <PackageReference Include="XivCommon" Version="4.0.0-alpha.2"/>
-        <PackageReference Include="DalamudPackager" Version="2.1.5" />
+        <PackageReference Include="DalamudPackager" Version="2.1.5"/>
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
@@ -48,7 +48,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GrimcoLib\GrimcoLib.csproj" />
+        <ProjectReference Include="..\GrimcoLib\GrimcoLib.csproj"/>
     </ItemGroup>
 
 </Project>

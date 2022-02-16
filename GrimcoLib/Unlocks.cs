@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if NET5_0_WINDOWS
+using System.Collections.Generic;
 using System.Linq;
 using Lumina;
 using Lumina.Excel.GeneratedSheets;
@@ -8,7 +9,7 @@ namespace GrimcoLib;
 public class Unlocks
 {
     private readonly GameData _dataManager;
-    
+
     public Unlocks(GameData dataManager)
     {
         _dataManager = dataManager;
@@ -21,27 +22,19 @@ public class Unlocks
 
         foreach (var quest in _dataManager.GetExcelSheet<Quest>()!)
         {
-            if (quest.Name.RawString.Length == 0 || quest.RowId == 65536)
-            {
-                continue;
-            }
+            if (quest.Name.RawString.Length == 0 || quest.RowId == 65536) continue;
 
-            var instances = this.InstanceUnlocks(quest, linkedInstances);
+            var instances = InstanceUnlocks(quest, linkedInstances);
             if (instances.Count > 0)
             {
                 foreach (var instance in instances)
-                {
                     instanceQuests.Add(new InstanceQuest
                     {
                         Instance = instance,
                         Quest = quest
                     });
-                }
 
-                foreach (var instance in instances)
-                {
-                    linkedInstances.Add(instance);
-                }
+                foreach (var instance in instances) linkedInstances.Add(instance);
             }
         }
 
@@ -51,10 +44,7 @@ public class Unlocks
     private HashSet<ContentFinderCondition> InstanceUnlocks(Quest quest,
         ICollection<ContentFinderCondition> others)
     {
-        if (quest.IsRepeatable)
-        {
-            return new HashSet<ContentFinderCondition>();
-        }
+        if (quest.IsRepeatable) return new HashSet<ContentFinderCondition>();
 
         var unlocks = new HashSet<ContentFinderCondition>();
 
@@ -62,10 +52,7 @@ public class Unlocks
         {
             var cfc = _dataManager.GetExcelSheet<ContentFinderCondition>()!.FirstOrDefault(cfc =>
                 cfc.Content == quest.InstanceContentUnlock.Row && cfc.ContentLinkType == 1);
-            if (cfc != null && cfc.UnlockQuest.Row == 0)
-            {
-                unlocks.Add(cfc);
-            }
+            if (cfc != null && cfc.UnlockQuest.Row == 0) unlocks.Add(cfc);
         }
 
         var instanceRefs = quest.ScriptInstruction
@@ -78,19 +65,12 @@ public class Unlocks
 
             var cfc = _dataManager.GetExcelSheet<ContentFinderCondition>()!.FirstOrDefault(cfc =>
                 cfc.Content == key && cfc.ContentLinkType == 1);
-            if (cfc == null || cfc.UnlockQuest.Row != 0 || others.Contains(cfc))
-            {
-                continue;
-            }
+            if (cfc == null || cfc.UnlockQuest.Row != 0 || others.Contains(cfc)) continue;
 
             if (!quest.ScriptInstruction.Any(i =>
                     i.RawString == "UNLOCK_ADD_NEW_CONTENT_TO_CF" || i.RawString.StartsWith("UNLOCK_DUNGEON")))
-            {
                 if (quest.ScriptInstruction.Any(i => i.RawString.StartsWith("LOC_ITEM")))
-                {
                     continue;
-                }
-            }
 
             unlocks.Add(cfc);
         }
@@ -98,3 +78,4 @@ public class Unlocks
         return unlocks;
     }
 }
+#endif

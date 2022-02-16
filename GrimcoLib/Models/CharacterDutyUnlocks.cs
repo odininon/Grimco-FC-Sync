@@ -4,7 +4,7 @@ namespace GrimcoLib.Models;
 
 public class CharacterDutyUnlocks
 {
-    public string? Character { get; set; }
+    public string Character { get; set; }
 
-    public List<string>? Duties { get; set; }
+    public List<string> Duties { get; set; }
 }

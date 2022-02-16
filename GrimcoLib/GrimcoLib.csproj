@@ -1,16 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0-windows</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
         <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0-windows'">
+        <DefineConstants>$(DefineConstants);NET5_0_WINDOWS</DefineConstants>
+    </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="XivCommon" Version="4.0.0-alpha.2" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0-windows'">
+        <PackageReference Include="XivCommon" Version="4.0.0-alpha.2"/>
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>

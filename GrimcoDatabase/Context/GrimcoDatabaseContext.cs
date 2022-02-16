@@ -19,7 +19,7 @@ public class GrimcoDatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Quest>().HasIndex(q => q.Name).IsUnique(true);
-        modelBuilder.Entity<Duty>().HasIndex(i => i.Name).IsUnique(true);
+        modelBuilder.Entity<Quest>().HasIndex(q => q.Name).IsUnique();
+        modelBuilder.Entity<Duty>().HasIndex(i => i.Name).IsUnique();
     }
 }

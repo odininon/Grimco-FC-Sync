@@ -2,10 +2,6 @@
 
 public class ApiKey
 {
-    public int ApiKeyId { get; set; }
-    public int UserId { get; set; }
-    public string Key { get; set; }
-
     public ApiKey()
     {
     }
@@ -16,4 +12,8 @@ public class ApiKey
         UserId = userId;
         Key = key;
     }
+
+    public int ApiKeyId { get; set; }
+    public int UserId { get; set; }
+    public string Key { get; set; }
 }

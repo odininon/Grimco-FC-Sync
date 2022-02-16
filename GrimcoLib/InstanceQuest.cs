@@ -1,7 +1,11 @@
-﻿namespace GrimcoLib;
+﻿#if NET5_0_WINDOWS
+using Lumina.Excel.GeneratedSheets;
+
+namespace GrimcoLib;
 
 public struct InstanceQuest
 {
-    public Lumina.Excel.GeneratedSheets.ContentFinderCondition Instance;
-    public Lumina.Excel.GeneratedSheets.Quest Quest;
+    public ContentFinderCondition Instance;
+    public Quest Quest;
 }
+#endif

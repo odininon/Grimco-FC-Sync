@@ -20,7 +20,7 @@ public class GenerateAPIKeyCommand : ICommand
 
         if (user == null)
         {
-            user = new User()
+            user = new User
             {
                 Name = Username
             };

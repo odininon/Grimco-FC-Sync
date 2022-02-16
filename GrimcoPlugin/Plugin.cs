@@ -10,17 +10,7 @@ namespace GrimcoPlugin;
 
 public sealed class Plugin : IDalamudPlugin
 {
-    public string Name => "Gricmo GrimcoPlugin";
-
     private const string commandName = "/grimco";
-
-    private DalamudPluginInterface PluginInterface { get; init; }
-    private CommandManager CommandManager { get; init; }
-    private Configuration Configuration { get; init; }
-    private DataManager DataManager { get; init; }
-    public ClientState ClientState { get; }
-    private PluginUI PluginUi { get; init; }
-    public XivCommonBase Common { get; set; }
 
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -28,50 +18,59 @@ public sealed class Plugin : IDalamudPlugin
         [RequiredVersion("1.0")] DataManager dataManager,
         [RequiredVersion("1.0")] ClientState clientState)
     {
-        this.DataManager = dataManager;
+        DataManager = dataManager;
         ClientState = clientState;
-        this.PluginInterface = pluginInterface;
-        this.CommandManager = commandManager;
-        this.Common = new XivCommonBase();
+        PluginInterface = pluginInterface;
+        CommandManager = commandManager;
+        Common = new XivCommonBase();
 
-        this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-        this.Configuration.Initialize(this.PluginInterface);
-        var webServiceClient = new WebServiceClient(new Cleaner(pluginInterface.Sanitizer), this.Configuration);
+        Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        Configuration.Initialize(PluginInterface);
+        var webServiceClient = new WebServiceClient(new Cleaner(pluginInterface.Sanitizer), Configuration);
         var unlocks = new Unlocks(dataManager.GameData);
 
         // you might normally want to embed resources and load them from the manifest stream
-        this.PluginUi = new PluginUI(this, this.Configuration, webServiceClient, unlocks);
+        PluginUi = new PluginUI(this, Configuration, webServiceClient, unlocks);
 
-        this.CommandManager.AddHandler(commandName, new CommandInfo(OnCommand)
+        CommandManager.AddHandler(commandName, new CommandInfo(OnCommand)
         {
             HelpMessage = "A useful message to display in /xlhelp"
         });
 
-        this.PluginInterface.UiBuilder.Draw += DrawUI;
-        this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+        PluginInterface.UiBuilder.Draw += DrawUI;
+        PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
     }
+
+    private DalamudPluginInterface PluginInterface { get; }
+    private CommandManager CommandManager { get; }
+    private Configuration Configuration { get; }
+    private DataManager DataManager { get; }
+    public ClientState ClientState { get; }
+    private PluginUI PluginUi { get; }
+    public XivCommonBase Common { get; set; }
+    public string Name => "Gricmo GrimcoPlugin";
 
 
     public void Dispose()
     {
-        this.PluginUi.Dispose();
-        this.Common.Dispose();
-        this.CommandManager.RemoveHandler(commandName);
+        PluginUi.Dispose();
+        Common.Dispose();
+        CommandManager.RemoveHandler(commandName);
     }
 
     private void OnCommand(string command, string args)
     {
         // in response to the slash command, just display our main ui
-        this.PluginUi.Visible = true;
+        PluginUi.Visible = true;
     }
 
     private void DrawUI()
     {
-        this.PluginUi.Draw();
+        PluginUi.Draw();
     }
 
     private void DrawConfigUI()
     {
-        this.PluginUi.SettingsVisible = true;
+        PluginUi.SettingsVisible = true;
     }
 }

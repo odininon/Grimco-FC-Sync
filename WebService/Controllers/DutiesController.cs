@@ -31,10 +31,7 @@ public class DutiesController : ControllerBase
     {
         var character =
             _context.Characters.FirstOrDefault(character => character.Name == characterDutyUnlocks.Character);
-        if (character == null && characterDutyUnlocks.Duties == null)
-        {
-            return BadRequest();
-        }
+        if (character == null && characterDutyUnlocks.Duties == null) return BadRequest();
 
         var unlockedDuties = characterDutyUnlocks.Duties!
             .Select(dutyNam => _context.Duties.First(duty => duty.Name == dutyNam));

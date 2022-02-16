@@ -9,29 +9,15 @@ namespace GrimcoPlugin;
 
 // It is good to have this be disposable in general, in case you ever need it
 // to do any cleanup
-class PluginUI : IDisposable
+internal class PluginUI : IDisposable
 {
-    public Plugin Plugin { get; }
-    private Configuration configuration;
-    private readonly WebServiceClient _webServiceClient;
     private readonly Unlocks _unlocks;
+    private readonly WebServiceClient _webServiceClient;
+    private readonly Configuration configuration;
+
+    private bool settingsVisible;
 
     // this extra bool exists for ImGui, since you can't ref a property
-    private bool visible = false;
-
-    public bool Visible
-    {
-        get { return this.visible; }
-        set { this.visible = value; }
-    }
-
-    private bool settingsVisible = false;
-
-    public bool SettingsVisible
-    {
-        get { return this.settingsVisible; }
-        set { this.settingsVisible = value; }
-    }
 
     // passing in the image here just for simplicity
     public PluginUI(Plugin plugin, Configuration configuration, WebServiceClient webServiceClient, Unlocks unlocks)
@@ -40,6 +26,16 @@ class PluginUI : IDisposable
         this.configuration = configuration;
         _webServiceClient = webServiceClient;
         _unlocks = unlocks;
+    }
+
+    public Plugin Plugin { get; }
+
+    public bool Visible { get; set; } = false;
+
+    public bool SettingsVisible
+    {
+        get => settingsVisible;
+        set => settingsVisible = value;
     }
 
     public void Dispose()
@@ -61,10 +57,7 @@ class PluginUI : IDisposable
 
     public void DrawMainWindow()
     {
-        if (!Visible)
-        {
-            return;
-        }
+        if (!Visible) return;
 
         ImGui.SetNextWindowSize(new Vector2(375, 330), ImGuiCond.FirstUseEver);
         ImGui.SetNextWindowSizeConstraints(new Vector2(375, 330), new Vector2(float.MaxValue, float.MaxValue));
@@ -75,14 +68,10 @@ class PluginUI : IDisposable
             var duties = new List<ContentFinderCondition>();
 
             foreach (var instanceQuest in instanceQuests)
-            {
                 if (Plugin.Common.Functions.Journal.IsQuestCompleted(instanceQuest.Quest))
-                {
                     duties.Add(instanceQuest.Instance);
-                }
-            }
 
-            _webServiceClient.UpdateDuties(this.Plugin.ClientState.LocalPlayer!, duties);
+            _webServiceClient.UpdateDuties(Plugin.ClientState.LocalPlayer!, duties);
         }
 
         ImGui.End();
@@ -90,29 +79,26 @@ class PluginUI : IDisposable
 
     public void DrawSettingsWindow()
     {
-        if (!SettingsVisible)
-        {
-            return;
-        }
+        if (!SettingsVisible) return;
 
         ImGui.SetNextWindowSize(new Vector2(232, 75), ImGuiCond.Always);
-        if (ImGui.Begin("Grimco Configuration Window", ref this.settingsVisible,
+        if (ImGui.Begin("Grimco Configuration Window", ref settingsVisible,
                 ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
                 ImGuiWindowFlags.NoScrollWithMouse))
         {
             // can't ref a property, so use a local copy
-            var apiKey = this.configuration.ApiKey;
+            var apiKey = configuration.ApiKey;
             if (ImGui.InputText("ApiKey", ref apiKey, 36))
             {
-                this.configuration.ApiKey = apiKey;
-                this.configuration.Save();
+                configuration.ApiKey = apiKey;
+                configuration.Save();
             }
 
-            var endpoint = this.configuration.EndPoint;
+            var endpoint = configuration.EndPoint;
             if (ImGui.InputText("EndPoint", ref endpoint, 36))
             {
-                this.configuration.EndPoint = endpoint;
-                this.configuration.Save();
+                configuration.EndPoint = endpoint;
+                configuration.Save();
             }
         }
 
