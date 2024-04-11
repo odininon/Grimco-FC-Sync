@@ -15,9 +15,10 @@ public class UpdateDBCommand : ICommand
     public void Execute()
     {
         using var db = new GrimcoDatabaseContext();
+        db.Database.EnsureCreated();
         using var transaction = db.Database.BeginTransaction();
 
-        var data = new GameData("F:/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game/sqpack");
+        var data = new GameData("C:/Program Files (x86)/SquareEnix/FINAL FANTASY XIV - A Realm Reborn/game/sqpack");
         var cleaner = new Cleaner(new Sanitizer(ClientLanguage.English));
 
         var unlocks = new Unlocks(data);

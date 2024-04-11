@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <PackageId>ConsoleTool</PackageId>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
@@ -12,15 +11,17 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.0-preview1"/>
-        <PackageReference Include="Dalamud.CrystalTower" Version="2.0.0"/>
-        <PackageReference Include="Lumina" Version="3.5.1"/>
-        <PackageReference Include="Lumina.Excel" Version="6.0.2"/>
-    </ItemGroup>
-
-    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <Reference Include="Dalamud">
             <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+        <Reference Include="Lumina">
+            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+        <Reference Include="Lumina.Excel">
+            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
             <Private>true</Private>
         </Reference>
     </ItemGroup>
@@ -29,5 +30,4 @@
         <ProjectReference Include="..\GrimcoDatabase\GrimcoDatabase.csproj"/>
         <ProjectReference Include="..\GrimcoLib\GrimcoLib.csproj"/>
     </ItemGroup>
-
 </Project>

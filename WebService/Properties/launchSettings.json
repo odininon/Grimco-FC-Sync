@@ -14,10 +14,10 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7174;http://localhost:5174",
+      "applicationUrl": "http://localhost:5174",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DATABASE_CON": "Host=localhost;Database=Grimco;Username=postgres;Password=postgres;"
+        "DATABASE_CON": "Host=localhost;Database=Grimco;Username=username;Password=password;"
       }
     },
     "IIS Express": {

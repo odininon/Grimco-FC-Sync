@@ -2,19 +2,19 @@
 
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
-        <TargetFrameworks>net5.0;net5.0-windows</TargetFrameworks>
+        <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
         <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
     </PropertyGroup>
     
-    <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0-windows'">
-        <DefineConstants>$(DefineConstants);NET5_0_WINDOWS</DefineConstants>
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+        <DefineConstants>$(DefineConstants);NET8_0_WINDOWS</DefineConstants>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0-windows'">
-        <PackageReference Include="XivCommon" Version="4.0.0-alpha.2"/>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+        <PackageReference Include="XivCommon" Version="9.0.0" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>

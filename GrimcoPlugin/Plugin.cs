@@ -1,8 +1,7 @@
-﻿using Dalamud.Data;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.Command;
+﻿using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using GrimcoLib;
 using XivCommon;
 
@@ -14,15 +13,15 @@ public sealed class Plugin : IDalamudPlugin
 
     public Plugin(
         [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-        [RequiredVersion("1.0")] CommandManager commandManager,
-        [RequiredVersion("1.0")] DataManager dataManager,
-        [RequiredVersion("1.0")] ClientState clientState)
+        [RequiredVersion("1.0")] ICommandManager commandManager,
+        [RequiredVersion("1.0")] IDataManager dataManager,
+        [RequiredVersion("1.0")] IClientState clientState)
     {
         DataManager = dataManager;
         ClientState = clientState;
         PluginInterface = pluginInterface;
         CommandManager = commandManager;
-        Common = new XivCommonBase();
+        Common = new XivCommonBase(PluginInterface);
 
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
         Configuration.Initialize(PluginInterface);
@@ -42,14 +41,13 @@ public sealed class Plugin : IDalamudPlugin
     }
 
     private DalamudPluginInterface PluginInterface { get; }
-    private CommandManager CommandManager { get; }
+    private ICommandManager CommandManager { get; }
     private Configuration Configuration { get; }
-    private DataManager DataManager { get; }
-    public ClientState ClientState { get; }
+    private IDataManager DataManager { get; }
+    public IClientState ClientState { get; }
     private PluginUI PluginUi { get; }
     public XivCommonBase Common { get; set; }
     public string Name => "Gricmo GrimcoPlugin";
-
 
     public void Dispose()
     {

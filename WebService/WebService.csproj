@@ -4,7 +4,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>default</LangVersion>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,10 +23,6 @@
     <ItemGroup>
         <ProjectReference Include="..\GrimcoDatabase\GrimcoDatabase.csproj"/>
         <ProjectReference Include="..\GrimcoLib\GrimcoLib.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Models"/>
     </ItemGroup>
 
 </Project>

@@ -9,19 +9,12 @@ namespace WebService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DutiesController : ControllerBase
+public class DutiesController(GrimcoDatabaseContext context) : ControllerBase
 {
-    private readonly GrimcoDatabaseContext _context;
-
-    public DutiesController(GrimcoDatabaseContext context)
-    {
-        _context = context;
-    }
-
     [HttpGet("all")]
     public async Task<List<Duty>> GetAllDuties()
     {
-        return await _context.Duties.Include(duty => duty.Quest).ToListAsync();
+        return await context.Duties.Include(duty => duty.Quest).ToListAsync();
     }
 
     [HttpPost]
@@ -30,15 +23,15 @@ public class DutiesController : ControllerBase
     public IActionResult Create(CharacterDutyUnlocks characterDutyUnlocks)
     {
         var character =
-            _context.Characters.FirstOrDefault(character => character.Name == characterDutyUnlocks.Character);
+            context.Characters.FirstOrDefault(character => character.Name == characterDutyUnlocks.Character);
         if (character == null && characterDutyUnlocks.Duties == null) return BadRequest();
 
         var unlockedDuties = characterDutyUnlocks.Duties!
-            .Select(dutyNam => _context.Duties.First(duty => duty.Name == dutyNam));
+            .Select(dutyNam => context.Duties.First(duty => duty.Name == dutyNam));
 
         foreach (var duty in unlockedDuties)
         {
-            var unlockedDuty = _context.UnlockedDuties.FirstOrDefault(unlockedDuty =>
+            var unlockedDuty = context.UnlockedDuties.FirstOrDefault(unlockedDuty =>
                 unlockedDuty.DutyId == duty.DutyId && unlockedDuty.CharacterId == character!.CharacterId);
 
             if (unlockedDuty != null) continue;
@@ -48,8 +41,8 @@ public class DutiesController : ControllerBase
                 CharacterId = character!.CharacterId,
                 DutyId = duty.DutyId
             };
-            _context.UnlockedDuties.Add(unlockedDuty);
-            _context.SaveChanges();
+            context.UnlockedDuties.Add(unlockedDuty);
+            context.SaveChanges();
         }
 
         return Ok("testing");
@@ -62,13 +55,13 @@ public class DutiesController : ControllerBase
         var result = new List<CharacterDutyUnlocks>();
 
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        var characters = _context.Characters.Where(character => character.UserId == userId).ToList();
+        var characters = context.Characters.Where(character => character.UserId == userId).ToList();
 
         foreach (var character in characters)
         {
-            var unlockedDuties = _context.UnlockedDuties.Where(duty => duty.CharacterId == character.CharacterId)
+            var unlockedDuties = context.UnlockedDuties.Where(duty => duty.CharacterId == character.CharacterId)
                 .Select(duty => duty.DutyId)
-                .Select(dutyId => _context.Duties.First(duty => duty.DutyId == dutyId))
+                .Select(dutyId => context.Duties.First(duty => duty.DutyId == dutyId))
                 .Select(duty => duty.Name)
                 .ToList();
 

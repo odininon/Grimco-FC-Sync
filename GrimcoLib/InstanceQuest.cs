@@ -1,4 +1,4 @@
-﻿#if NET5_0_WINDOWS
+﻿#if NET8_0_WINDOWS
 using Lumina.Excel.GeneratedSheets;
 
 namespace GrimcoLib;
